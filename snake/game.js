@@ -13,30 +13,152 @@
   const speedEl = document.getElementById("speed");
   const statusEl = document.getElementById("statusMessage");
   const soundButton = document.getElementById("soundButton");
+  const languageButton = document.getElementById("languageButton");
+  const themeButton = document.getElementById("themeButton");
   const pauseButton = document.getElementById("pauseButton");
+  const descriptionMeta = document.querySelector('meta[name="description"]');
+
+  const copy = {
+    en: {
+      pageTitle: "MArtin vs. the Machines",
+      description: "MArtin vs. the Machines – a Dometic-inspired Snake game about flow, kaizen and completely unnecessary downtime.",
+      title: "MArtin vs. the machines",
+      highScore: "HIGH SCORE",
+      takt: "TAKT TIME",
+      shiftStart: "SHIFT START 06:00",
+      keyHelp: "Arrow keys / WASD · Space pauses",
+      shiftReport: "SHIFT REPORT",
+      factoryFloor: "On the factory floor",
+      snakeDesc: "Lean expert, apparently a snake.",
+      boltName: "Kaizen bolt",
+      boltDesc: "+1 improvement and worse ergonomics.",
+      machineCell: "Machine cell",
+      machineDesc: "Forming, gluing or milling.",
+      footnote: "*The OEE value was scientifically calculated by the game's marketing department.",
+      startTitle: "Is MArtin flow-ready?",
+      startText: "Collect Kaizen bolts. Avoid machines, walls and your own process map.",
+      startButton: "START THE LINE",
+      pauseTitle: "Planned downtime",
+      pauseText: "MArtin is documenting why this definitely does not affect OEE.",
+      resumeButton: "RESUME PRODUCTION",
+      gameoverGood: "Lean, but not immortal",
+      gameoverBad: "Red on Andon",
+      restartButton: "RESTART THE LINE",
+      waiting: "The line is waiting. Someone is looking for the forklift key.",
+      running: "The line is running. MArtin has already moved three pieces of floor tape.",
+      paused: "Planned downtime. Therefore, it does not count. Clever.",
+      resumed: "The line is running again. The meeting has been postponed.",
+      calm: "Calm",
+      taktSpeed: "Takt",
+      panic: "Panic",
+      soundOn: "SOUND: ON",
+      soundOff: "SOUND: OFF",
+      turnSoundOff: "Turn sound off",
+      turnSoundOn: "Turn sound on",
+      light: "LIGHT",
+      dark: "DARK",
+      switchLight: "Switch to light theme",
+      switchDark: "Switch to dark theme",
+      switchLanguage: "Switch to Swedish",
+      directionControls: "Direction controls",
+      canvasLabel: "Game board. Guide MArtin, collect improvements and avoid the machines.",
+      pause: "Pause",
+      resume: "Resume",
+      directions: { up: "Up", down: "Down", left: "Left", right: "Right" },
+      machineLabels: ["FORM 43", "GLUE 1", "MILL 2", "FV13", "EPOT"],
+      quips: [
+        "One improvement found. Three meetings were booked to investigate it.",
+        "MArtin shortened the lead time. Finance wants a PowerPoint.",
+        "FIFO works! Nobody is entirely sure why.",
+        "5S completed: the bolt now has its own taped square.",
+        "Gemba says yes. Excel says #N/A!",
+        "Flow improved. The forklift is offended.",
+        "Standard Work updated. The old version is still on the wall.",
+        "Kaizen! Cost: €0. Approval process: 14 weeks.",
+        "MArtin spotted waste. The waste looked nervous."
+      ],
+      crashes: [
+        "DOWNTIME: MArtin went on a Gemba walk without a safety distance.",
+        "MACHINE CONTACT: Apparently, the risk assessment was decorative.",
+        "FLOW ERROR: The process became so lean it ate itself.",
+        "DEVIATION: Someone parked a machine in the spaghetti diagram.",
+        "STOP TIME: 120 seconds? No, now it is a coffee break."
+      ],
+      result: (crash, score) => `${crash} MArtin completed ${score} improvement${score === 1 ? "" : "s"}.`
+    },
+    sv: {
+      pageTitle: "MArtin mot maskinerna",
+      description: "MArtin mot maskinerna – ett Dometic-inspirerat Snake-spel om flöde, kaizen och totalt onödiga driftstopp.",
+      title: "MArtin mot maskinerna",
+      highScore: "REKORD",
+      takt: "TAKT",
+      shiftStart: "SKIFTSTART 06:00",
+      keyHelp: "Piltangenter / WASD · Mellanslag pausar",
+      shiftReport: "SKIFTRAPPORT",
+      factoryFloor: "På fabriksgolvet",
+      snakeDesc: "Lean-expert, tydligen orm.",
+      boltName: "Kaizen-skruv",
+      boltDesc: "+1 förbättring och sämre ergonomi.",
+      machineCell: "Maskincell",
+      machineDesc: "Formning, limning eller fräsning.",
+      footnote: "*OEE-värdet är vetenskapligt framtaget av spelets marknadsavdelning.",
+      startTitle: "Är MArtin flödesredo?",
+      startText: "Samla Kaizen-skruvar. Undvik maskiner, väggar och den egna processkartan.",
+      startButton: "STARTA LINAN",
+      pauseTitle: "Planerat stopp",
+      pauseText: "MArtin dokumenterar att det här absolut inte påverkar OEE.",
+      resumeButton: "FORTSÄTT PRODUCERA",
+      gameoverGood: "Lean, men inte odödlig",
+      gameoverBad: "Rött på Andon",
+      restartButton: "ÅTERSTARTA LINAN",
+      waiting: "Linjen väntar. Någon letar efter trucknyckeln.",
+      running: "Linan går. MArtin har redan flyttat tre tejpbitar.",
+      paused: "Planerat stopp. Därför räknas det inte. Smart.",
+      resumed: "Linan går igen. Mötet är uppskjutet.",
+      calm: "Lugn",
+      taktSpeed: "Takt",
+      panic: "Panik",
+      soundOn: "LJUD: PÅ",
+      soundOff: "LJUD: AV",
+      turnSoundOff: "Slå av ljud",
+      turnSoundOn: "Slå på ljud",
+      light: "LJUST",
+      dark: "MÖRKT",
+      switchLight: "Byt till ljust tema",
+      switchDark: "Byt till mörkt tema",
+      switchLanguage: "Byt till engelska",
+      directionControls: "Styrknappar",
+      canvasLabel: "Spelplan. Styr MArtin, samla förbättringar och undvik maskinerna.",
+      pause: "Pausa",
+      resume: "Fortsätt",
+      directions: { up: "Upp", down: "Ner", left: "Vänster", right: "Höger" },
+      machineLabels: ["FORM 43", "LIM 1", "FRÄS 2", "FV13", "EPOT"],
+      quips: [
+        "En förbättring hittad. Tre möten bokades för att utreda den.",
+        "MArtin kortade ledtiden. Ekonomiavdelningen vill ha en PowerPoint.",
+        "FIFO fungerar! Ingen vet riktigt varför.",
+        "5S genomförd: skruven har nu en tejpad ruta.",
+        "Gemba säger ja. Excel säger #SAKNAS!",
+        "Flödet förbättrat. Trucken är kränkt.",
+        "Standard Work uppdaterad. Den gamla versionen sitter kvar på väggen.",
+        "Kaizen! Kostnad: 0 kr. Godkännandeprocess: 14 veckor.",
+        "MArtin såg ett slöseri. Slöseriet såg nervöst ut."
+      ],
+      crashes: [
+        "DRIFTSTOPP: MArtin gick på Gemba utan skyddsavstånd.",
+        "MASKINKONTAKT: Riskanalysen var tydligen bara dekorativ.",
+        "FLÖDESFEL: Processen blev så lean att den åt upp sig själv.",
+        "AVVIKELSE: Någon parkerade en maskin mitt i spagettidiagrammet.",
+        "STOPPTID: 120 sekunder? Nej, nu blev det fika."
+      ],
+      result: (crash, score) => `${crash} MArtin hann med ${score} förbättring${score === 1 ? "" : "ar"}.`
+    }
+  };
 
   const GRID = 24;
   const CELL = canvas.width / GRID;
-  const machineLabels = ["FORM 43", "LIM 1", "FRÄS 2", "FV13", "EPOT"];
-  const quips = [
-    "En förbättring hittad. Tre möten bokades för att utreda den.",
-    "MArtin kortade ledtiden. Ekonomiavdelningen vill ha en PowerPoint.",
-    "FIFO fungerar! Ingen vet riktigt varför.",
-    "5S genomförd: skruven har nu en tejpad ruta.",
-    "Gemba säger ja. Excel säger #SAKNAS!",
-    "Flödet förbättrat. Trucken är kränkt.",
-    "Standard Work uppdaterad. Den gamla versionen sitter kvar på väggen.",
-    "Kaizen! Kostnad: 0 kr. Godkännandeprocess: 14 veckor.",
-    "MArtin såg ett slöseri. Slöseriet såg nervöst ut."
-  ];
-  const crashQuips = [
-    "DRIFTSTOPP: MArtin gick på Gemba utan skyddsavstånd.",
-    "MASKINKONTAKT: Riskanalysen var tydligen bara dekorativ.",
-    "FLÖDESFEL: Processen blev så lean att den åt upp sig själv.",
-    "AVVIKELSE: Någon parkerade en maskin mitt i spagettidiagrammet.",
-    "STOPPTID: 120 sekunder? Nej, nu blev det fika."
-  ];
-
+  let lang = localStorage.getItem("martinMachineSnakeLanguage") || "en";
+  let theme = localStorage.getItem("martinMachineSnakeTheme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
   let snake = [];
   let direction = { x: 1, y: 0 };
   let queuedDirection = { x: 1, y: 0 };
@@ -52,16 +174,74 @@
   let lastTime = 0;
   let stepMs = 150;
   let swipeStart = null;
+  let screenState = "start";
+  let lastCrashIndex = 0;
 
+  const t = () => copy[lang];
   highScoreEl.textContent = highScore;
 
   function makeMachines() {
     return [
-      { x: 5, y: 4, w: 4, h: 2, label: machineLabels[0] },
-      { x: 15, y: 5, w: 3, h: 3, label: machineLabels[1] },
-      { x: 7, y: 15, w: 3, h: 3, label: machineLabels[2] },
-      { x: 16, y: 17, w: 4, h: 2, label: machineLabels[3] }
+      { x: 5, y: 4, w: 4, h: 2, label: 0 },
+      { x: 15, y: 5, w: 3, h: 3, label: 1 },
+      { x: 7, y: 15, w: 3, h: 3, label: 2 },
+      { x: 16, y: 17, w: 4, h: 2, label: 3 }
     ];
+  }
+
+  function applyLanguage() {
+    document.documentElement.lang = lang;
+    document.title = t().pageTitle;
+    descriptionMeta.content = t().description;
+    document.querySelectorAll("[data-i18n]").forEach(element => {
+      element.textContent = t()[element.dataset.i18n];
+    });
+    document.querySelectorAll("[data-i18n-aria]").forEach(element => {
+      element.setAttribute("aria-label", t()[element.dataset.i18nAria]);
+    });
+    document.querySelectorAll("[data-dir]").forEach(button => button.setAttribute("aria-label", t().directions[button.dataset.dir]));
+    languageButton.textContent = lang === "en" ? "SV" : "EN";
+    languageButton.setAttribute("aria-label", t().switchLanguage);
+    updateToolbar();
+    updateStats();
+    updateStateCopy();
+    draw();
+  }
+
+  function applyTheme() {
+    document.documentElement.dataset.theme = theme;
+    updateToolbar();
+  }
+
+  function updateToolbar() {
+    soundButton.textContent = soundOn ? t().soundOn : t().soundOff;
+    soundButton.setAttribute("aria-label", soundOn ? t().turnSoundOff : t().turnSoundOn);
+    const nextIsLight = theme === "dark";
+    themeButton.textContent = nextIsLight ? `☀ ${t().light}` : `☾ ${t().dark}`;
+    themeButton.setAttribute("aria-label", nextIsLight ? t().switchLight : t().switchDark);
+    pauseButton.setAttribute("aria-label", paused ? t().resume : t().pause);
+  }
+
+  function updateStateCopy() {
+    if (screenState === "start") {
+      statusEl.textContent = t().waiting;
+      overlayTitle.textContent = t().startTitle;
+      overlayText.textContent = t().startText;
+      startButton.textContent = t().startButton;
+    } else if (screenState === "paused") {
+      statusEl.textContent = t().paused;
+      overlayTitle.textContent = t().pauseTitle;
+      overlayText.textContent = t().pauseText;
+      startButton.textContent = t().resumeButton;
+    } else if (screenState === "gameover") {
+      const crash = t().crashes[lastCrashIndex];
+      statusEl.textContent = crash;
+      overlayTitle.textContent = score >= 10 ? t().gameoverGood : t().gameoverBad;
+      overlayText.textContent = t().result(crash, score);
+      startButton.textContent = t().restartButton;
+    } else {
+      statusEl.textContent = t().running;
+    }
   }
 
   function resetGame() {
@@ -72,9 +252,9 @@
     score = 0;
     stepMs = 150;
     paused = false;
+    pauseButton.textContent = "Ⅱ";
     updateStats();
     placeTarget();
-    statusEl.textContent = "Linan går. MArtin har redan flyttat tre tejpbitar.";
     draw();
   }
 
@@ -82,7 +262,10 @@
     cancelAnimationFrame(loopId);
     resetGame();
     running = true;
+    screenState = "playing";
     overlay.classList.add("hidden");
+    statusEl.textContent = t().running;
+    updateToolbar();
     lastTime = performance.now();
     loopId = requestAnimationFrame(loop);
     beep(260, .05);
@@ -114,7 +297,7 @@
     if (head.x === target.x && head.y === target.y) {
       score += 1;
       stepMs = Math.max(72, 150 - score * 4);
-      statusEl.textContent = quips[(score - 1) % quips.length];
+      statusEl.textContent = t().quips[(score - 1) % t().quips.length];
       updateStats();
       placeTarget();
       beep(520 + score * 18, .06);
@@ -125,14 +308,12 @@
 
   function gameOver() {
     running = false;
+    screenState = "gameover";
     highScore = Math.max(highScore, score);
     localStorage.setItem("martinMachineSnakeHighScore", String(highScore));
     highScoreEl.textContent = highScore;
-    const message = crashQuips[Math.floor(Math.random() * crashQuips.length)];
-    statusEl.textContent = message;
-    overlayTitle.textContent = score >= 10 ? "Lean, men inte odödlig" : "Rött på Andon";
-    overlayText.textContent = `${message} MArtin hann med ${score} förbättring${score === 1 ? "" : "ar"}.`;
-    startButton.textContent = "ÅTERSTARTA LINAN";
+    lastCrashIndex = Math.floor(Math.random() * t().crashes.length);
+    updateStateCopy();
     overlay.classList.remove("hidden");
     beep(115, .22);
   }
@@ -141,14 +322,14 @@
     if (!running) return;
     paused = !paused;
     pauseButton.textContent = paused ? "▶" : "Ⅱ";
-    statusEl.textContent = paused ? "Planerat stopp. Därför räknas det inte. Smart." : "Linan går igen. Mötet är uppskjutet.";
+    screenState = paused ? "paused" : "playing";
+    updateToolbar();
     if (paused) {
-      overlayTitle.textContent = "Planerat stopp";
-      overlayText.textContent = "MArtin dokumenterar att det här absolut inte påverkar OEE.";
-      startButton.textContent = "FORTSÄTT PRODUCERA";
+      updateStateCopy();
       overlay.classList.remove("hidden");
     } else {
       overlay.classList.add("hidden");
+      statusEl.textContent = t().resumed;
       lastTime = performance.now();
     }
   }
@@ -159,7 +340,7 @@
   }
 
   function isMachineCell(x, y) {
-    return machines.some(m => x >= m.x && x < m.x + m.w && y >= m.y && y < m.y + m.h);
+    return machines.some(machine => x >= machine.x && x < machine.x + machine.w && y >= machine.y && y < machine.y + machine.h);
   }
 
   function occupied(x, y) {
@@ -177,7 +358,7 @@
   function updateStats() {
     scoreEl.textContent = score;
     oeeEl.textContent = `${Math.min(99, 12 + score * 7)}%`;
-    speedEl.textContent = score < 4 ? "Lugn" : score < 9 ? "Takt" : "Panik";
+    speedEl.textContent = score < 4 ? t().calm : score < 9 ? t().taktSpeed : t().panic;
   }
 
   function draw() {
@@ -223,7 +404,7 @@
     ctx.font = `700 ${Math.max(10, CELL * .42)}px Segoe UI`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(machine.label, x + w / 2, y + h / 2, w - 22);
+    ctx.fillText(t().machineLabels[machine.label], x + w / 2, y + h / 2, w - 22);
   }
 
   function drawTarget() {
@@ -254,7 +435,8 @@
     ctx.fillStyle = isHead ? "#00c2ff" : index % 2 ? "#008fc2" : "#00aada";
     ctx.shadowColor = isHead ? "rgba(0,194,255,.8)" : "transparent";
     ctx.shadowBlur = isHead ? 10 : 0;
-    roundedRect(x, y, size, size, isHead ? 8 : 6);
+    ctx.beginPath();
+    ctx.roundRect(x, y, size, size, isHead ? 8 : 6);
     ctx.fill();
     ctx.shadowBlur = 0;
 
@@ -274,11 +456,6 @@
     }
   }
 
-  function roundedRect(x, y, w, h, radius) {
-    ctx.beginPath();
-    ctx.roundRect(x, y, w, h, radius);
-  }
-
   function beep(frequency, duration) {
     if (!soundOn) return;
     try {
@@ -292,7 +469,7 @@
       oscillator.connect(gain).connect(audioContext.destination);
       oscillator.start();
       oscillator.stop(audioContext.currentTime + duration);
-    } catch (_) { /* Ljud är bonus, produktion är viktigare. */ }
+    } catch (_) { /* Sound is bonus. Production is the priority. */ }
   }
 
   const directionByKey = {
@@ -338,10 +515,21 @@
   pauseButton.addEventListener("click", togglePause);
   soundButton.addEventListener("click", () => {
     soundOn = !soundOn;
-    soundButton.textContent = `LJUD: ${soundOn ? "PÅ" : "AV"}`;
-    soundButton.setAttribute("aria-label", soundOn ? "Slå av ljud" : "Slå på ljud");
+    updateToolbar();
     beep(360, .05);
+  });
+  languageButton.addEventListener("click", () => {
+    lang = lang === "en" ? "sv" : "en";
+    localStorage.setItem("martinMachineSnakeLanguage", lang);
+    applyLanguage();
+  });
+  themeButton.addEventListener("click", () => {
+    theme = theme === "dark" ? "light" : "dark";
+    localStorage.setItem("martinMachineSnakeTheme", theme);
+    applyTheme();
   });
 
   resetGame();
+  applyTheme();
+  applyLanguage();
 })();
