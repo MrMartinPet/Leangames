@@ -1,12 +1,12 @@
 <!doctype html>
 <!-- GitHub Pages: MArtin Machine Snake -->
-<html lang="sv">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#07131c">
-  <meta name="description" content="MArtin mot maskinerna – ett Dometic-inspirerat Snake-spel om flow, kaizen och totalt onödiga driftstopp.">
-  <title>MArtin mot maskinerna</title>
+  <meta name="description" content="MArtin vs. the Machines – a Dometic-inspired Snake game about flow, kaizen and completely unnecessary downtime.">
+  <title>MArtin vs. the Machines</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%2307131c'/%3E%3Cpath d='M13 45V31h10v8h9V24h19v11H41v14H22v-4z' fill='%2300c2ff'/%3E%3Ccircle cx='48' cy='29' r='2' fill='white'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -15,38 +15,42 @@
     <header class="topbar">
       <div>
         <p class="eyebrow">DOMETIC LEAN TOOLS · TIDAHOLM</p>
-        <h1>MArtin mot maskinerna</h1>
+        <h1 data-i18n="title">MArtin vs. the machines</h1>
       </div>
-      <button class="sound-button" id="soundButton" type="button" aria-label="Slå av ljud">LJUD: PÅ</button>
+      <div class="toolbar">
+        <button class="tool-button" id="languageButton" type="button" aria-label="Switch to Swedish">SV</button>
+        <button class="tool-button" id="themeButton" type="button" aria-label="Switch to light theme">☀ LIGHT</button>
+        <button class="tool-button" id="soundButton" type="button" aria-label="Turn sound off">SOUND: ON</button>
+      </div>
     </header>
 
     <section class="game-layout" aria-label="Snake-spel">
       <div class="game-column">
         <div class="stats" aria-live="polite">
           <div><span>KAIZEN</span><strong id="score">0</strong></div>
-          <div><span>REKORD</span><strong id="highScore">0</strong></div>
+          <div><span data-i18n="highScore">HIGH SCORE</span><strong id="highScore">0</strong></div>
           <div><span>OEE*</span><strong id="oee">12%</strong></div>
-          <div><span>TAKT</span><strong id="speed">Lugn</strong></div>
+          <div><span data-i18n="takt">TAKT TIME</span><strong id="speed">Calm</strong></div>
         </div>
 
         <div class="canvas-wrap" id="canvasWrap">
-          <canvas id="gameCanvas" width="600" height="600" aria-label="Spelplan. Styr MArtin och samla förbättringar utan att köra in i maskinerna."></canvas>
+          <canvas id="gameCanvas" width="600" height="600" aria-label="Game board. Guide MArtin, collect improvements and avoid the machines." data-i18n-aria="canvasLabel"></canvas>
           <div class="scanline" aria-hidden="true"></div>
           <div class="overlay" id="overlay">
-            <p class="overlay-kicker">SKIFTSTART 06:00</p>
-            <h2 id="overlayTitle">Är MArtin flödesredo?</h2>
-            <p id="overlayText">Samla Kaizen-skruvar. Undvik maskiner, väggar och den egna processkartan.</p>
-            <button id="startButton" type="button">STARTA LINAN</button>
-            <p class="key-help">Piltangenter / WASD · Mellanslag pausar</p>
+            <p class="overlay-kicker" data-i18n="shiftStart">SHIFT START 06:00</p>
+            <h2 id="overlayTitle">Is MArtin flow-ready?</h2>
+            <p id="overlayText">Collect Kaizen bolts. Avoid machines, walls and your own process map.</p>
+            <button id="startButton" type="button">START THE LINE</button>
+            <p class="key-help" data-i18n="keyHelp">Arrow keys / WASD · Space pauses</p>
           </div>
         </div>
 
-        <div class="mobile-controls" aria-label="Styrknappar">
-          <button data-dir="up" aria-label="Upp">▲</button>
-          <button data-dir="left" aria-label="Vänster">◀</button>
-          <button id="pauseButton" aria-label="Pausa">Ⅱ</button>
-          <button data-dir="right" aria-label="Höger">▶</button>
-          <button data-dir="down" aria-label="Ner">▼</button>
+        <div class="mobile-controls" aria-label="Direction controls" data-i18n-aria="directionControls">
+          <button data-dir="up" aria-label="Up">▲</button>
+          <button data-dir="left" aria-label="Left">◀</button>
+          <button id="pauseButton" aria-label="Pause">Ⅱ</button>
+          <button data-dir="right" aria-label="Right">▶</button>
+          <button data-dir="down" aria-label="Down">▼</button>
         </div>
       </div>
 
@@ -54,23 +58,23 @@
         <div class="status-card">
           <div class="status-heading">
             <span class="live-dot"></span>
-            <span>SKIFTRAPPORT</span>
+            <span data-i18n="shiftReport">SHIFT REPORT</span>
           </div>
-          <p id="statusMessage">Linjen väntar. Någon letar efter trucknyckeln.</p>
+          <p id="statusMessage">The line is waiting. Someone is looking for the forklift key.</p>
         </div>
 
         <div class="legend">
-          <h2>På fabriksgolvet</h2>
-          <div class="legend-row"><span class="sample snake"></span><p><strong>MArtin</strong><br>Lean-expert, tydligen orm.</p></div>
-          <div class="legend-row"><span class="sample bolt">✦</span><p><strong>Kaizen-skruv</strong><br>+1 förbättring och sämre ergonomi.</p></div>
-          <div class="legend-row"><span class="sample machine"></span><p><strong>Maskincell</strong><br>Formning, limning eller fräsning.</p></div>
+          <h2 data-i18n="factoryFloor">On the factory floor</h2>
+          <div class="legend-row"><span class="sample snake"></span><p><strong>MArtin</strong><br><span data-i18n="snakeDesc">Lean expert, apparently a snake.</span></p></div>
+          <div class="legend-row"><span class="sample bolt">✦</span><p><strong data-i18n="boltName">Kaizen bolt</strong><br><span data-i18n="boltDesc">+1 improvement and worse ergonomics.</span></p></div>
+          <div class="legend-row"><span class="sample machine"></span><p><strong data-i18n="machineCell">Machine cell</strong><br><span data-i18n="machineDesc">Forming, gluing or milling.</span></p></div>
         </div>
 
         <div class="andon">
           <span>ANDON</span>
           <div class="andon-lights"><i></i><i></i><i class="active"></i></div>
         </div>
-        <p class="footnote">*OEE-värdet är vetenskapligt framtaget av spelets marknadsavdelning.</p>
+        <p class="footnote" data-i18n="footnote">*The OEE value was scientifically calculated by the game's marketing department.</p>
       </aside>
     </section>
   </main>
