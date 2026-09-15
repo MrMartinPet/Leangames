@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07131c">
+  <meta name="description" content="MArtin mot maskinerna – ett Dometic-inspirerat Snake-spel om flow, kaizen och totalt onödiga driftstopp.">
+  <title>MArtin mot maskinerna</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%2307131c'/%3E%3Cpath d='M13 45V31h10v8h9V24h19v11H41v14H22v-4z' fill='%2300c2ff'/%3E%3Ccircle cx='48' cy='29' r='2' fill='white'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">DOMETIC LEAN TOOLS · TIDAHOLM</p>
+        <h1>MArtin mot maskinerna</h1>
+      </div>
+      <button class="sound-button" id="soundButton" type="button" aria-label="Slå av ljud">LJUD: PÅ</button>
+    </header>
+
+    <section class="game-layout" aria-label="Snake-spel">
+      <div class="game-column">
+        <div class="stats" aria-live="polite">
+          <div><span>KAIZEN</span><strong id="score">0</strong></div>
+          <div><span>REKORD</span><strong id="highScore">0</strong></div>
+          <div><span>OEE*</span><strong id="oee">12%</strong></div>
+          <div><span>TAKT</span><strong id="speed">Lugn</strong></div>
+        </div>
+
+        <div class="canvas-wrap" id="canvasWrap">
+          <canvas id="gameCanvas" width="600" height="600" aria-label="Spelplan. Styr MArtin och samla förbättringar utan att köra in i maskinerna."></canvas>
+          <div class="scanline" aria-hidden="true"></div>
+          <div class="overlay" id="overlay">
+            <p class="overlay-kicker">SKIFTSTART 06:00</p>
+            <h2 id="overlayTitle">Är MArtin flödesredo?</h2>
+            <p id="overlayText">Samla Kaizen-skruvar. Undvik maskiner, väggar och den egna processkartan.</p>
+            <button id="startButton" type="button">STARTA LINAN</button>
+            <p class="key-help">Piltangenter / WASD · Mellanslag pausar</p>
+          </div>
+        </div>
+
+        <div class="mobile-controls" aria-label="Styrknappar">
+          <button data-dir="up" aria-label="Upp">▲</button>
+          <button data-dir="left" aria-label="Vänster">◀</button>
+          <button id="pauseButton" aria-label="Pausa">Ⅱ</button>
+          <button data-dir="right" aria-label="Höger">▶</button>
+          <button data-dir="down" aria-label="Ner">▼</button>
+        </div>
+      </div>
+
+      <aside class="side-panel">
+        <div class="status-card">
+          <div class="status-heading">
+            <span class="live-dot"></span>
+            <span>SKIFTRAPPORT</span>
+          </div>
+          <p id="statusMessage">Linjen väntar. Någon letar efter trucknyckeln.</p>
+        </div>
+
+        <div class="legend">
+          <h2>På fabriksgolvet</h2>
+          <div class="legend-row"><span class="sample snake"></span><p><strong>MArtin</strong><br>Lean-expert, tydligen orm.</p></div>
+          <div class="legend-row"><span class="sample bolt">✦</span><p><strong>Kaizen-skruv</strong><br>+1 förbättring och sämre ergonomi.</p></div>
+          <div class="legend-row"><span class="sample machine"></span><p><strong>Maskincell</strong><br>Formning, limning eller fräsning.</p></div>
+        </div>
+
+        <div class="andon">
+          <span>ANDON</span>
+          <div class="andon-lights"><i></i><i></i><i class="active"></i></div>
+        </div>
+        <p class="footnote">*OEE-värdet är vetenskapligt framtaget av spelets marknadsavdelning.</p>
+      </aside>
+    </section>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
